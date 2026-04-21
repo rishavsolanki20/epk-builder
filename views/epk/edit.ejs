@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit EPK - SoundKit</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+    <div class="container" style="max-width: 800px; margin: 2rem auto; padding: 2rem;">
+        <h1>Edit Your EPK</h1>
+        <p>EPK URL: <a href="/epk/<%= epk.slug %>" target="_blank">/epk/<%= epk.slug %></a></p>
+        
+        <div style="margin-top: 2rem;">
+            <a href="/dashboard" class="btn-secondary">← Back to Dashboard</a>
+            <a href="/epk/<%= epk.slug %>" target="_blank" class="btn-primary">Preview EPK</a>
+        </div>
+    </div>
+</body>
+</html>

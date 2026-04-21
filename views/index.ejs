@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoundKit - Electronic Press Kit Builder for Musicians</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1a1a1a; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .logo { font-size: 1.5rem; font-weight: 700; color: white; text-decoration: none; }
+        .nav-buttons { display: flex; gap: 1rem; align-items: center; }
+        .btn { padding: 0.65rem 1.5rem; border-radius: 6px; text-decoration: none; font-weight: 500; cursor: pointer; border: none; font-size: 0.95rem; transition: all 0.3s ease; }
+        .btn-primary { background: #ff6b6b; color: white; }
+        .btn-primary:hover { background: #ee5a5a; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.2); color: white; border: 1px solid rgba(255, 255, 255, 0.3); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.3); }
+        .hero { background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%); padding: 4rem 2rem; display: flex; align-items: center; justify-content: center; gap: 3rem; min-height: 600px; }
+        .hero-content { flex: 1; max-width: 600px; }
+        .hero-title { font-size: 3rem; font-weight: 800; color: white; margin-bottom: 1.5rem; line-height: 1.2; }
+        .hero-description { font-size: 1.2rem; color: rgba(255, 255, 255, 0.85); margin-bottom: 2rem; line-height: 1.6; }
+        .hero-cta { display: flex; gap: 1rem; align-items: center; }
+        .btn-large { padding: 1rem 2rem; font-size: 1.1rem; }
+        .trial-note { color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; margin-top: 1rem; }
+        .features-section { padding: 5rem 2rem; background: white; }
+        .section-title { text-align: center; font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; color: #1a1a1a; }
+        .section-subtitle { text-align: center; font-size: 1.2rem; color: #666; margin-bottom: 4rem; }
+        .features-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; }
+        .feature-card { text-align: center; padding: 2rem; }
+        .feature-icon { width: 60px; height: 60px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 2rem; }
+        .feature-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem; color: #1a1a1a; }
+        .feature-description { color: #666; line-height: 1.7; }
+        .cta-section { padding: 5rem 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); text-align: center; color: white; }
+        .cta-title { font-size: 2.5rem; font-weight: 700; margin-bottom: 1.5rem; }
+        .cta-description { font-size: 1.2rem; margin-bottom: 2rem; opacity: 0.9; }
+        @media (max-width: 768px) {
+            .hero { flex-direction: column; text-align: center; padding: 3rem 1.5rem; }
+            .hero-title { font-size: 2rem; }
+            .section-title { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="/" class="logo">SoundKit</a>
+        <nav class="nav-buttons">
+            <% if (user) { %>
+                <a href="/dashboard" class="btn btn-secondary">Dashboard</a>
+                <a href="/auth/logout" class="btn btn-primary">Logout</a>
+            <% } else { %>
+                <a href="/auth/login" class="btn btn-secondary">Login</a>
+                <a href="/auth/signup" class="btn btn-primary">Sign Up</a>
+            <% } %>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Build your music EPK in minutes</h1>
+            <p class="hero-description">
+                SoundKit has everything you need to create a professional electronic press kit. 
+                Showcase your music, share your story, and connect with industry professionals.
+            </p>
+            <div class="hero-cta">
+                <% if (user) { %>
+                    <a href="/dashboard" class="btn btn-primary btn-large">Go to Dashboard</a>
+                <% } else { %>
+                    <a href="/auth/signup" class="btn btn-primary btn-large">Get Started</a>
+                <% } %>
+            </div>
+            <p class="trial-note">Free 14 day trial, no credit card needed.</p>
+        </div>
+    </section>
+
+    <section class="features-section">
+        <h2 class="section-title">The all-in-one EPK builder for musicians</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎵</div>
+                <h3 class="feature-title">Showcase your music</h3>
+                <p class="feature-description">
+                    Embed tracks from Spotify, SoundCloud, and YouTube. Create beautiful audio players 
+                    that make your music shine.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📸</div>
+                <h3 class="feature-title">Professional press photos</h3>
+                <p class="feature-description">
+                    Upload high-resolution photos, create galleries, and provide download links 
+                    for media and venues.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📰</div>
+                <h3 class="feature-title">Share your story</h3>
+                <p class="feature-description">
+                    Add your bio, press releases, reviews, and media coverage. Keep everything 
+                    organized and accessible.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎬</div>
+                <h3 class="feature-title">Video integration</h3>
+                <p class="feature-description">
+                    Embed music videos, live performances, and behind-the-scenes content from 
+                    YouTube and Vimeo.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3 class="feature-title">Track engagement</h3>
+                <p class="feature-description">
+                    See who's viewing your EPK, which songs they're playing, and what content 
+                    they're downloading.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔗</div>
+                <h3 class="feature-title">Share instantly</h3>
+                <p class="feature-description">
+                    Get a custom URL for your EPK. Share it with venues, labels, press, 
+                    and industry professionals.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2 class="cta-title">Start building your EPK today</h2>
+        <p class="cta-description">Join thousands of artists who trust SoundKit for their electronic press kits</p>
+        <% if (user) { %>
+            <a href="/dashboard" class="btn btn-primary btn-large">Go to Dashboard</a>
+        <% } else { %>
+            <a href="/auth/signup" class="btn btn-primary btn-large">Get Started Free</a>
+            <p class="trial-note">No credit card required • 14-day free trial</p>
+        <% } %>
+    </section>
+</body>
+</html>

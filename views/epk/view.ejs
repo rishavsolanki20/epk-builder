@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= epk.artistName %> - Electronic Press Kit</title>
+    <meta name="description" content="<%= epk.bio ? epk.bio.substring(0, 150) : 'Electronic Press Kit for ' + epk.artistName %>">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.7; color: #2d3748; background: #f7fafc; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        /* Header */
+        .header { background: linear-gradient(135deg, <%= epk.customColors.primary %> 0%, <%= epk.customColors.secondary %> 100%); color: white; padding: 4rem 2rem; text-align: center; }
+        .artist-name { font-size: 3.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .genre { font-size: 1.3rem; opacity: 0.9; margin-bottom: 1.5rem; }
+        .location { opacity: 0.85; font-size: 1.1rem; margin-bottom: 2rem; }
+        
+        /* Social Links */
+        .social-links { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; margin-top: 2rem; }
+        .social-link { background: rgba(255, 255, 255, 0.2); padding: 0.75rem 1.5rem; border-radius: 8px; color: white; text-decoration: none; transition: all 0.3s; display: flex; align-items: center; gap: 0.5rem; }
+        .social-link:hover { background: rgba(255, 255, 255, 0.3); transform: translateY(-2px); }
+        
+        /* Content Section */
+        .content { background: white; }
+        .section { padding: 4rem 2rem; }
+        .section-title { font-size: 2rem; font-weight: 700; margin-bottom: 2rem; color: #1a202c; text-align: center; }
+        
+        /* Bio */
+        .bio-text { max-width: 800px; margin: 0 auto; font-size: 1.1rem; line-height: 1.8; color: #4a5568; white-space: pre-wrap; }
+        
+        /* Photos */
+        .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; max-width: 1200px; margin: 0 auto; }
+        .photo-item { border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); transition: transform 0.3s; }
+        .photo-item:hover { transform: scale(1.05); }
+        .photo-item img { width: 100%; height: 300px; object-fit: cover; display: block; }
+        
+        /* Music */
+        .music-grid { max-width: 900px; margin: 0 auto; display: grid; gap: 2rem; }
+        .music-item { background: #f7fafc; padding: 2rem; border-radius: 12px; border-left: 4px solid <%= epk.customColors.accent %>; }
+        .music-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 0.5rem; color: #1a202c; }
+        .music-platform { color: #718096; font-size: 0.9rem; margin-bottom: 1rem; }
+        .music-link { color: <%= epk.customColors.primary %>; text-decoration: none; font-weight: 600; }
+        .music-link:hover { text-decoration: underline; }
+        
+        /* Videos */
+        .video-grid { max-width: 900px; margin: 0 auto; display: grid; gap: 2rem; }
+        .video-item { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); }
+        .video-embed { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; }
+        .video-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .video-info { padding: 1.5rem; }
+        .video-title { font-size: 1.2rem; font-weight: 600; color: #1a202c; }
+        
+        /* Press */
+        .press-grid { max-width: 900px; margin: 0 auto; display: grid; gap: 2rem; }
+        .press-item { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08); }
+        .press-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 0.5rem; color: #1a202c; }
+        .press-meta { color: #718096; font-size: 0.9rem; margin-bottom: 1rem; }
+        .press-quote { font-style: italic; color: #4a5568; line-height: 1.7; margin-bottom: 1rem; padding-left: 1.5rem; border-left: 3px solid <%= epk.customColors.accent %>; }
+        .press-link { color: <%= epk.customColors.primary %>; text-decoration: none; font-weight: 600; }
+        
+        /* Footer */
+        .footer { background: #2d3748; color: white; padding: 3rem 2rem; text-align: center; }
+        .footer-text { opacity: 0.8; margin-bottom: 1rem; }
+        .powered-by { font-size: 0.9rem; opacity: 0.6; }
+        .powered-by a { color: white; text-decoration: none; }
+        
+        @media (max-width: 768px) {
+            .artist-name { font-size: 2.5rem; }
+            .photo-grid { grid-template-columns: 1fr; }
+            .section { padding: 3rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1 class="artist-name"><%= epk.artistName %></h1>
+            <% if (epk.genre) { %>
+                <p class="genre"><%= epk.genre %></p>
+            <% } %>
+            <% if (epk.location) { %>
+                <p class="location">📍 <%= epk.location %></p>
+            <% } %>
+            
+            <!-- Social Links -->
+            <% if (epk.socialLinks && Object.values(epk.socialLinks).some(link => link)) { %>
+                <div class="social-links">
+                    <% if (epk.socialLinks.spotify) { %>
+                        <a href="<%= epk.socialLinks.spotify %>" target="_blank" class="social-link">🎵 Spotify</a>
+                    <% } %>
+                    <% if (epk.socialLinks.instagram) { %>
+                        <a href="<%= epk.socialLinks.instagram %>" target="_blank" class="social-link">📸 Instagram</a>
+                    <% } %>
+                    <% if (epk.socialLinks.youtube) { %>
+                        <a href="<%= epk.socialLinks.youtube %>" target="_blank" class="social-link">📹 YouTube</a>
+                    <% } %>
+                    <% if (epk.socialLinks.soundcloud) { %>
+                        <a href="<%= epk.socialLinks.soundcloud %>" target="_blank" class="social-link">🔊 SoundCloud</a>
+                    <% } %>
+                    <% if (epk.website) { %>
+                        <a href="<%= epk.website %>" target="_blank" class="social-link">🌐 Website</a>
+                    <% } %>
+                </div>
+            <% } %>
+        </div>
+    </header>
+
+    <!-- Bio Section -->
+    <% if (epk.bio) { %>
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title">About</h2>
+                <div class="bio-text"><%= epk.bio %></div>
+            </div>
+        </section>
+    <% } %>
+
+    <!-- Music Section -->
+    <% if (epk.music && epk.music.length > 0) { %>
+        <section class="section" style="background: #f7fafc;">
+            <div class="container">
+                <h2 class="section-title">Music</h2>
+                <div class="music-grid">
+                    <% epk.music.forEach(track => { %>
+                        <div class="music-item">
+                            <h3 class="music-title"><%= track.title %></h3>
+                            <% if (track.platform !== 'upload') { %>
+                                <p class="music-platform"><%= track.platform %></p>
+                                <% if (track.description) { %>
+                                    <p style="color: #4a5568; margin-bottom: 1rem;"><%= track.description %></p>
+                                <% } %>
+                                <a href="<%= track.url %>" target="_blank" class="music-link">Listen Now →</a>
+                            <% } else { %>
+                                <p class="music-platform">Audio File</p>
+                                <% if (track.description) { %>
+                                    <p style="color: #4a5568; margin-bottom: 1rem;"><%= track.description %></p>
+                                <% } %>
+                                <audio controls style="width: 100%; margin-top: 1rem;">
+                                    <source src="<%= track.filePath %>" type="audio/mpeg">
+                                    Your browser does not support the audio element.
+                                </audio>
+                            <% } %>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+        </section>
+    <% } %>
+
+    <!-- Photos Section -->
+    <% if (epk.photos && epk.photos.length > 0) { %>
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title">Photos</h2>
+                <div class="photo-grid">
+                    <% epk.photos.forEach(photo => { %>
+                        <div class="photo-item">
+                            <img src="<%= photo.url %>" alt="<%= photo.caption || epk.artistName %>">
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+        </section>
+    <% } %>
+
+    <!-- Videos Section -->
+    <% if (epk.videos && epk.videos.length > 0) { %>
+        <section class="section" style="background: #f7fafc;">
+            <div class="container">
+                <h2 class="section-title">Videos</h2>
+                <div class="video-grid">
+                    <% epk.videos.forEach(video => { %>
+                        <div class="video-item">
+                            <div class="video-embed">
+                                <% if (video.platform === 'youtube') { %>
+                                    <iframe src="https://www.youtube.com/embed/<%= video.embedId %>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                <% } else if (video.platform === 'vimeo') { %>
+                                    <iframe src="https://player.vimeo.com/video/<%= video.embedId %>" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                                <% } %>
+                            </div>
+                            <div class="video-info">
+                                <h3 class="video-title"><%= video.title %></h3>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+        </section>
+    <% } %>
+
+    <!-- Press Section -->
+    <% if (epk.press && epk.press.length > 0) { %>
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title">Press</h2>
+                <div class="press-grid">
+                    <% epk.press.forEach(item => { %>
+                        <div class="press-item">
+                            <h3 class="press-title"><%= item.title %></h3>
+                            <p class="press-meta">
+                                <%= item.publication %>
+                                <% if (item.date) { %>
+                                    • <%= new Date(item.date).toLocaleDateString() %>
+                                <% } %>
+                            </p>
+                            <% if (item.quote) { %>
+                                <blockquote class="press-quote">"<%= item.quote %>"</blockquote>
+                            <% } %>
+                            <% if (item.url) { %>
+                                <a href="<%= item.url %>" target="_blank" class="press-link">Read Article →</a>
+                            <% } %>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+        </section>
+    <% } %>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">© <%= new Date().getFullYear() %> <%= epk.artistName %>. All rights reserved.</p>
+            <p class="powered-by">Powered by <a href="/">SoundKit</a></p>
+        </div>
+    </footer>
+</body>
+</html>

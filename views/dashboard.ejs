@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SoundKit</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">SoundKit</div>
+            <nav class="nav-menu">
+                <a href="/dashboard" class="nav-item active">
+                    <span class="icon">📊</span>
+                    Dashboard
+                </a>
+                <a href="#" class="nav-item" onclick="showSection('epk')">
+                    <span class="icon">🎵</span>
+                    My EPK
+                </a>
+                <a href="#" class="nav-item" onclick="showSection('media')">
+                    <span class="icon">📸</span>
+                    Media
+                </a>
+                <a href="#" class="nav-item" onclick="showSection('analytics')">
+                    <span class="icon">📈</span>
+                    Analytics
+                </a>
+                <a href="#" class="nav-item" onclick="showSection('settings')">
+                    <span class="icon">⚙️</span>
+                    Settings
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar"><%= user.artistName.charAt(0) %></div>
+                    <div class="user-details">
+                        <div class="user-name"><%= user.artistName %></div>
+                        <div class="user-plan"><%= user.plan %> plan</div>
+                    </div>
+                </div>
+                <a href="/auth/logout" class="logout-btn">Logout</a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                <h1>Welcome back, <%= user.artistName %>!</h1>
+                <button class="btn-primary" onclick="previewEPK()">
+                    <span>👁️</span> Preview EPK
+                </button>
+            </header>
+
+            <div id="overview-section" class="content-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Views</div>
+                        <div class="stat-value" id="totalViews">0</div>
+                        <div class="stat-change positive">+12% this week</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Photos</div>
+                        <div class="stat-value" id="photoCount">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Music Tracks</div>
+                        <div class="stat-value" id="musicCount">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Press Coverage</div>
+                        <div class="stat-value" id="pressCount">0</div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <h2>Quick Actions</h2>
+                    <div class="action-grid">
+                        <button class="action-card" onclick="showSection('media')">
+                            <span class="action-icon">📸</span>
+                            <span class="action-title">Upload Photos</span>
+                        </button>
+                        <button class="action-card" onclick="addMusic()">
+                            <span class="action-icon">🎵</span>
+                            <span class="action-title">Add Music</span>
+                        </button>
+                        <button class="action-card" onclick="addPress()">
+                            <span class="action-icon">📰</span>
+                            <span class="action-title">Add Press</span>
+                        </button>
+                        <button class="action-card" onclick="shareEPK()">
+                            <span class="action-icon">🔗</span>
+                            <span class="action-title">Share EPK</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="epk-section" class="content-section" style="display: none;">
+                <h2>Edit Your EPK</h2>
+                <div class="epk-editor">
+                    <form id="epkForm" class="form-grid">
+                        <div class="form-group">
+                            <label>Artist Name</label>
+                            <input type="text" id="artistName" name="artistName" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label>Genre</label>
+                            <input type="text" id="genre" name="genre" class="form-input">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Bio</label>
+                            <textarea id="bio" name="bio" class="form-textarea" rows="6"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Location</label>
+                            <input type="text" id="location" name="location" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label>Website</label>
+                            <input type="url" id="website" name="website" class="form-input">
+                        </div>
+                        <div class="form-actions full-width">
+                            <button type="submit" class="btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div id="media-section" class="content-section" style="display: none;">
+                <h2>Media Gallery</h2>
+                
+                <div class="media-tabs">
+                    <button class="tab-btn active" onclick="switchMediaTab('photos')">Photos</button>
+                    <button class="tab-btn" onclick="switchMediaTab('audio')">Audio Files</button>
+                </div>
+
+                <div id="photos-tab" class="media-tab-content">
+                    <div class="media-upload">
+                        <button class="btn-primary" onclick="document.getElementById('photoInput').click()">
+                            📸 Upload Photo
+                        </button>
+                        <input type="file" id="photoInput" accept="image/*" style="display: none;" onchange="uploadPhoto(this)">
+                    </div>
+                    <div id="photoGallery" class="photo-grid"></div>
+                </div>
+
+                <div id="audio-tab" class="media-tab-content" style="display: none;">
+                    <div class="media-upload">
+                        <button class="btn-primary" onclick="document.getElementById('audioInput').click()">
+                            🎵 Upload MP3
+                        </button>
+                        <input type="file" id="audioInput" accept="audio/*" style="display: none;" onchange="uploadAudio(this)">
+                        <p style="color: #718096; font-size: 0.9rem; margin-top: 0.5rem;">
+                            Supported formats: MP3, WAV, M4A, AAC (Max 50MB)
+                        </p>
+                    </div>
+                    <div id="audioList" class="audio-list"></div>
+                </div>
+            </div>
+
+            <div id="analytics-section" class="content-section" style="display: none;">
+                <h2>Analytics</h2>
+                <div class="analytics-grid">
+                    <div class="chart-card">
+                        <h3>Views Over Time</h3>
+                        <canvas id="viewsChart"></canvas>
+                    </div>
+                    <div class="engagement-stats">
+                        <h3>Engagement</h3>
+                        <div class="engagement-item">
+                            <span>Most Played Track</span>
+                            <span>-</span>
+                        </div>
+                        <div class="engagement-item">
+                            <span>Most Viewed Photo</span>
+                            <span>-</span>
+                        </div>
+                        <div class="engagement-item">
+                            <span>Average Session</span>
+                            <span>-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="settings-section" class="content-section" style="display: none;">
+                <h2>Settings</h2>
+                <div class="settings-sections">
+                    <div class="settings-card publish-card">
+                        <h3>🌐 Publishing Status</h3>
+                        <p style="margin: 1rem 0; color: #4a5568;">Make your EPK public so others can view it</p>
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f7fafc; border-radius: 8px;">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="publishToggle" onchange="togglePublish()">
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <div>
+                                <div id="publishStatus" style="font-weight: 600; font-size: 1.1rem;">EPK is private</div>
+                                <div id="publishHelp" style="font-size: 0.875rem; color: #718096; margin-top: 0.25rem;">
+                                    Toggle ON to make your EPK public and shareable
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-card">
+                        <h3>🔗 EPK URL</h3>
+                        <p style="margin-bottom: 1rem; color: #4a5568;">Share this link with venues, labels, and fans</p>
+                        <div class="url-display">
+                            <input type="text" id="epkUrl" readonly class="form-input">
+                            <button onclick="copyUrl()" class="btn-secondary">Copy</button>
+                        </div>
+                        <p style="margin-top: 0.5rem; font-size: 0.875rem; color: #e53e3e;" id="urlWarning">
+                            ⚠️ Make sure your EPK is published before sharing this link!
+                        </p>
+                    </div>
+                    
+                    <div class="settings-card">
+                        <h3>👤 Account</h3>
+                        <button class="btn-secondary">Change Password</button>
+                        <button class="btn-danger">Delete Account</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>
